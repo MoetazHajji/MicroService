@@ -1,0 +1,45 @@
+version: "3.9"
+services:
+
+  Eureka:
+    container_name: Eureka
+    build: Eureka-discovery
+    hostname: serviceregistry
+    ports:
+      - "8761:8761"
+    image: "discovery-service"
+    links:
+      - "Gateway"
+    depends_on:
+      - Gateway
+
+  Gateway:
+    container_name: Gateway
+    build: Api-Gateway
+    ports:
+      - "8088:8088"
+    image: "gateway"
+    depends_on:
+      - Stock
+
+  Stock:
+    container_name: Stock
+    build: StockService
+    ports:
+      - "8180:8180"
+    image: "stock-service"
+    depends_on:
+      - db-mysql
+
+  db-mysql:
+    image: mysql
+    volumes:
+      - "./sito/db/:/var/lib/mysql"
+    container_name: db-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
