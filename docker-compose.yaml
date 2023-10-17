@@ -1,45 +1,63 @@
 version: "3.9"
 services:
-
-  Eureka:
-    container_name: Eureka
-    build: Eureka-discovery
+  eureka:
+    container_name: eureka
     hostname: serviceregistry
+    build: ./Eureka-discovery
     ports:
       - "8761:8761"
-    image: "discovery-service"
-    links:
-      - "Gateway"
-    depends_on:
-      - Gateway
+    image: "eureka"
+    networks:
+      - spring-network
 
-  Gateway:
-    container_name: Gateway
-    build: Api-Gateway
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./Api-Gateway
     ports:
       - "8088:8088"
-    image: "gateway"
+    image: "api-gateway"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://serviceregistry:8761/eureka/
     depends_on:
-      - Stock
+      - eureka
+    networks:
+      - spring-network
 
-  Stock:
-    container_name: Stock
+  stock-service:
+    container_name: stock-service
     build: StockService
     ports:
       - "8180:8180"
     image: "stock-service"
+    environment:
+      - SPRING_DATASOURCE_URL= jdbc:mysql://db-mysql:3306/biochar-database?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME= root
+      - SPRING_DATASOURCE_PASSWORD= root
+      - spring.jpa.show-sql=true
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE= http://serviceregistry:8761/eureka/
+      - spring.jpa.database-platform=org.hibernate.dialect.MySQL5Dialect
+      - spring.cloud.config.import-check.enabled=false
+      - spring.cloud.config.fail-fast=true
+      - eureka.client.register-with-eureka=true
+      - logging.pattern.console= =%d{yyyy-MM-dd HH:mm:ss} - %-5level- %logger{45} - %msg %n
     depends_on:
+      - eureka
       - db-mysql
+      - api-gateway
+    networks:
+      - spring-network
 
   db-mysql:
-    image: mysql
-    volumes:
-      - "./sito/db/:/var/lib/mysql"
+    image: "mysql:5.6"
     container_name: db-mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_ROOT_PASSWORD=
-      - MYSQL_ALLOW_EMPTY_PASSWORD=true
     ports:
       - "3306:3306"
     restart: unless-stopped
+
+networks:
+  spring-network:
