@@ -20,12 +20,10 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
     String name_product;
     String reference;
     Double price;
     Double size_product;
-
     String description;
     String image;
     Long count_order;

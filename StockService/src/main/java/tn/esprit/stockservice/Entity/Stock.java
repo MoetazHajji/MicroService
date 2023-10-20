@@ -19,11 +19,9 @@ public class Stock implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
     Long nbProduct;
     String unit;
     Double total_quantity;
-
     Double storage;
     Double free_storage;
     Double used_storage;
