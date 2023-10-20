@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroStages", "MicroStages\MicroStages.csproj", "{6EA18063-CB9D-47B9-82CB-EE2A953CBDDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6EA18063-CB9D-47B9-82CB-EE2A953CBDDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EA18063-CB9D-47B9-82CB-EE2A953CBDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EA18063-CB9D-47B9-82CB-EE2A953CBDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EA18063-CB9D-47B9-82CB-EE2A953CBDDE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E4A866F-5572-43BD-86BF-69C3247247EA}
+	EndGlobalSection
+EndGlobal
