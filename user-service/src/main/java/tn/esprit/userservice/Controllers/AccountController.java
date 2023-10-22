@@ -4,30 +4,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 import tn.esprit.userservice.Dtos.AccountDto;
+import tn.esprit.userservice.Dtos.AuthenticationRequestDto;
+import tn.esprit.userservice.Dtos.MsgReponseStatusDto;
+import tn.esprit.userservice.Dtos.ReponseStatus;
 import tn.esprit.userservice.Entitys.Account;
+import tn.esprit.userservice.Entitys.Roles;
 import tn.esprit.userservice.Mappers.AccountMapper;
-import tn.esprit.userservice.Services.IAccountService;
+import tn.esprit.userservice.Services.Class.FileService;
+import tn.esprit.userservice.Services.Interfaces.IAccountService;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+
 @RestController
 @RequestMapping("/account")
 public class AccountController {
-    private  IAccountService iAccountService;
+    private final  IAccountService iAccountService;
     @Autowired
-    public AccountController(@Qualifier("account-service") IAccountService iAccountService){this.iAccountService = iAccountService;}
+    public AccountController(@Qualifier("account-service") IAccountService iAccountService)
+    {this.iAccountService = iAccountService;}
 
     @GetMapping
     public List<AccountDto> SelectAll () {
         List<Account>  accounts = iAccountService.selectAll () ;
         return accounts.stream().map(account -> AccountMapper.mapToDto(account)) .collect(Collectors.toList());
-       }
+    }
     @GetMapping("{id}")
     public ResponseEntity<AccountDto> SelectById (@PathVariable long id) {
         Account account = iAccountService.selectById (id);
@@ -38,7 +46,7 @@ public class AccountController {
         return ResponseEntity.ok(AccountMapper.mapToDto(iAccountService.selectbyUsername(username)));}
     @GetMapping("select-by-usernames/{usernames}")
     public  List<AccountDto> selectbyMultipleUsername( @PathVariable("usernames") String[] usernames){
-       final List<Account>  accounts = iAccountService.selectbyMultipleUsername(usernames) ;
+        final List<Account>  accounts = iAccountService.selectbyMultipleUsername(usernames) ;
         return accounts.stream().map(account -> AccountMapper.mapToDto(account)) .collect(Collectors.toList());
     }
     @PostMapping
@@ -57,5 +65,38 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
 
 
-}
 
+
+
+
+
+
+
+    @PostMapping("/register")
+    public ResponseEntity<MsgReponseStatusDto> register(/*@Validated*/  @RequestBody AuthenticationRequestDto request) throws IOException, InterruptedException, MessagingException {
+        return ResponseEntity.ok(iAccountService.register(request));}
+
+    @GetMapping ("/confirm-email/{username}/{code}")
+    public RedirectView confirmEmail(@PathVariable("username") String username , @PathVariable("code")  String code) {
+        if ( iAccountService.confirmEmail( username , code).getStatus() == ReponseStatus.SUCCESSFUL)
+        { return new RedirectView(FileService.pageHomeLink+FileService.pathSignIn); }
+        return new RedirectView(FileService.pageHomeLink+FileService.pathError);  }
+
+    @PutMapping("/update-role-and-activate/{username}/{role}/{enabled}")
+    public  ResponseEntity<MsgReponseStatusDto>  updateRoleAndActivate (@PathVariable("username")String username , @PathVariable("role") Roles role, @PathVariable("enabled") boolean enabled){
+        return ResponseEntity.ok( iAccountService.updateRoleAndActivate(  username ,  role,  enabled));}
+
+    @PutMapping("/mail-code-forgot-password/{username}/{email}")
+    public  ResponseEntity<MsgReponseStatusDto> sendMailCodeForgotPassword( @PathVariable("username")String username , @PathVariable("email") String email) throws IOException, InterruptedException,MessagingException {
+        return ResponseEntity.ok( iAccountService.sendMailCodeForgotPassword( username ,  email));}
+
+    @PutMapping("/update-forgot-password/{username}/{code}/{newpassword}")
+    public  ResponseEntity<MsgReponseStatusDto>  updateForgotPassword (@PathVariable("username")String username , @PathVariable("code")String code , @PathVariable("newpassword") String newPassword){
+        return ResponseEntity.ok( iAccountService.updateForgotPassword( username, code,  newPassword) );}
+
+    @PutMapping("update-password/{username}/{currentpassword}/{newpassword}")
+    public ResponseEntity<MsgReponseStatusDto>  updatePassword(@PathVariable("username")  String usename,
+                                                               @PathVariable("currentpassword")  String currentPassword,
+                                                               @PathVariable("newpassword")  String newPassword){
+        return  ResponseEntity.ok((MsgReponseStatusDto) iAccountService.updatePassword(usename,currentPassword,newPassword));}
+}

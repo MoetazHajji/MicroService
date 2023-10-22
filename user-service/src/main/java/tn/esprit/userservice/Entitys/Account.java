@@ -26,6 +26,19 @@ public class Account implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id" )
     long id;
+
+
+    @Column(name = "username" )
+    String username;
+    @Column(name = "role" )
+    @Enumerated(EnumType.STRING)
+    Roles role;
+    @Column(name = "enabled" )
+    boolean enabled;
+    @Column(name = "code" )
+    String code;
+    @Column(name = "password" )
+    String password;
     @Column(name = "created_at" )
     LocalDateTime createdAt ;
     @Column(name = "firstname" )
@@ -56,8 +69,8 @@ public class Account implements Serializable {
     int zipCode;
     @Column(name = "address" )
     String address;
-    @OneToOne(cascade = CascadeType.ALL)
-    User user;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    User user;
     @OneToMany(cascade = CascadeType.ALL , mappedBy="account")
     List<Attachment> attachments = new ArrayList<Attachment>();
     public void addAttachment(Attachment attachment) {
@@ -71,14 +84,19 @@ public class Account implements Serializable {
         attachments.remove(attachment);
         attachment.setAccount(null);
     }
-    public void addUser(User user) {
-        this.setUser(user);
-        user.setAccount(this);
-    }
-    public void removeUser(User user) {
-        this.setUser(null);
-        user.setAccount(null);
-    }
+//    public void addUser(User user) {
+//        this.setUser(user);
+//        user.setAccount(this);
+//    }
+//    public void removeUser(User user) {
+//        this.setUser(null);
+//        user.setAccount(null);
+//    }
+
+
+
+
+
 }
 
 

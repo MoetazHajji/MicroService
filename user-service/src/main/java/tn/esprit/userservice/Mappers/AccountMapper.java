@@ -2,7 +2,6 @@ package tn.esprit.userservice.Mappers;
 
 import tn.esprit.userservice.Dtos.AccountDto;
 import tn.esprit.userservice.Dtos.AttachementDto;
-import tn.esprit.userservice.Dtos.UserDto;
 import tn.esprit.userservice.Entitys.Account;
 
 import java.util.ArrayList;
@@ -13,6 +12,8 @@ public class AccountMapper {
     public static Account mapToEntity(AccountDto accountDto){
         return Account.builder()
                 .id(accountDto.getId())
+                .username(accountDto.getUsername())
+                .code(accountDto.getCode())
                 .firstname(accountDto.getFirstname())
                 .lastname(accountDto.getLastname())
                 .cin(accountDto.getCin())
@@ -29,7 +30,7 @@ public class AccountMapper {
                 .build();
     }
     public static AccountDto mapToDto(Account account){
-        UserDto  userDto = (account.getUser()==null ? null :  UserMapper.mapToDto( account.getUser() ) );
+//        UserDto  userDto = (account.getUser()==null ? null :  UserMapper.mapToDto( account.getUser() ) );
         List<AttachementDto> attachementDtoList = new ArrayList<AttachementDto>();
         attachementDtoList = (
                 (account.getAttachments() != null && ! account.getAttachments().isEmpty())
@@ -44,6 +45,11 @@ public class AccountMapper {
 
         return AccountDto.builder()
                 .id(account.getId())
+                .createdAt(account.getCreatedAt())
+                .username(account.getUsername())
+                .role(account.getRole())
+                .enabled(account.isEnabled())
+                .code(account.getCode())
                 .firstname(account.getFirstname())
                 .lastname(account.getLastname())
                 .cin(account.getCin())
@@ -57,7 +63,6 @@ public class AccountMapper {
                 .city(account.getCity())
                 .zipCode(account.getZipCode())
                 .address(account.getAddress())
-                .userDto(userDto)
                 .attachementsDto(attachementDtoList)
                 .build();
     }

@@ -17,4 +17,9 @@ public class UserDto {
     Roles role;
     boolean enabled;
     String code;
+
+    String email;
+    String password;
+    String firstname;
+    String lastName;
 }

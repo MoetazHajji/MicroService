@@ -1,4 +1,4 @@
-package tn.esprit.userservice.Services;
+package tn.esprit.userservice.Services.Class;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import tn.esprit.userservice.Exceptions.RessourceNotFoundException;
 import tn.esprit.userservice.Libs.GenericCRUDService;
 import tn.esprit.userservice.Repositorys.AccountRepository;
 import tn.esprit.userservice.Repositorys.AttachmentRepository;
+import tn.esprit.userservice.Services.Interfaces.IAttachmentService;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -149,7 +150,7 @@ public class AttachmentService extends GenericCRUDService<Attachment,String> imp
     @Override
     public Attachment getLastPhoto(long idAccount)  {
         return attachmentRepository.findLastPhotoSaved( idAccount)
-                        .orElseThrow(()-> new RessourceNotFoundException("Service Attachement  : getLastPhoto Error : "+idAccount));
+                .orElseThrow(()-> new RessourceNotFoundException("Service Attachement  : getLastPhoto Error : "+idAccount));
 
     }
 
@@ -170,4 +171,10 @@ public class AttachmentService extends GenericCRUDService<Attachment,String> imp
                 .sorted(Comparator.comparing(Attachment::getAddAt))
                 .collect(Collectors.toList());
     }//2023-08-27T11:38:04  -> 2023-08-27T11:37:04
+
+
+
+
+
+
 }

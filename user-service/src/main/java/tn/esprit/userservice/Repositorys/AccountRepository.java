@@ -11,11 +11,19 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    @Query("select ac from  Account ac JOIN  ac.user u   where  ((u.username = :username)) ")
-    Optional<Account>   findAccountByUsername(@Param("username") String username   );
-
-
-
-    @Query("select ac from  Account ac JOIN  ac.user u WHERE u.username IN :usernames")
+    Optional<Account>   findAccountByUsername( String username   );
+    @Query("select ac from  Account ac WHERE ac.username IN :usernames")
     List<Account> findAccountDtosByUsernameIn(String[] usernames);
+
+    Optional<Account> findAccountByCode(String Code);
+    Optional<Account> findAccountByCodeAndUsername(String Code,String Username);
+    @Query("select case when (count(act) > 0)  then true else false end from Account act  where  ((act.username = :username))")
+    boolean isCorrectUserName(@Param("username") String username   );
+    @Query("select case when (count(act) > 0)  then true else false end from Account act  where  ((act.code = :code))")
+    boolean isCorrectCode(@Param("code") String code   );
+    @Query("select act from Account act    where  ((act.email = :email)AND (act.username = :username)) ")
+    Optional<Account> findUserByUsernameAndEmail(@Param("username") String username ,@Param("email") String email   );
+    @Query("select case when (count(act) > 0)  then true else false end from Account act   where  ((act.email = :email)AND(act.username = :username))")
+    boolean isCorrectEmailAndUsername(@Param("username") String username  , @Param("email") String email    );
+
 }

@@ -12,7 +12,7 @@ import tn.esprit.userservice.Dtos.AttachementDto;
 import tn.esprit.userservice.Entitys.Attachment;
 import tn.esprit.userservice.Entitys.Category;
 import tn.esprit.userservice.Mappers.AttachmentMapper;
-import tn.esprit.userservice.Services.IAttachmentService;
+import tn.esprit.userservice.Services.Interfaces.IAttachmentService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,7 +74,7 @@ public class AttachmentController {
     }
     @GetMapping("/account-and-catrgory/{idAccount}/{category}")
     public  List<AttachementDto> getByAccountAndCatrgory (@PathVariable("idAccount") long idAccount ,@PathVariable("category") Category category ) {
-       List<Attachment> attachments = attachmentService.selectByAccountAndCatrgory(idAccount , category);
+        List<Attachment> attachments = attachmentService.selectByAccountAndCatrgory(idAccount , category);
         return attachments.stream().map(attachment -> AttachmentMapper.mapToDto(attachment)) .collect(Collectors.toList());
     }
 }
