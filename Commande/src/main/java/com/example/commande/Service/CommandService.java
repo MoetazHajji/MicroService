@@ -28,8 +28,16 @@ public class CommandService implements ICommandService {
 
     @Override
     public Command modifyCommand(Command command) {
+
+
         return commandRepository.save(command);
     }
+
+
+
+
+
+
 
     @Override
     public void deleteCommand(Long id) {

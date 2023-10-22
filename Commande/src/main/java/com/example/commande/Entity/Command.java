@@ -21,7 +21,7 @@ public class Command implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @NonNull
+    //@NonNull
     LocalDate date;
     @NonNull
     String notice;

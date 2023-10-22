@@ -16,7 +16,7 @@ public class GatewayConfig {
                 .route("appointment-service", r -> r.path("/biochar/appointment-service/**").uri("lb://appointment-service"))
                 .route("analysis-service", r -> r.path("/biochar/analysis/**").uri("lb://analysis-service"))
                 .route("stock-service", r -> r.path("/biochar/stock-service/**").uri("lb://stock-service"))
-                .route("commande-service", r -> r.path("/biochar/commande/**").uri("lb://commande-service"))
+                .route("commande-service", r -> r.path("/biochar/commande-service/**").uri("lb://commande-service"))
                 .route("hr-service", r -> r.path("/biochar/hr/**").uri("lb://hr-service"))
                 .route("user-service", r -> r.path("/biochar/user-service/**").uri("lb://user-service"))
                 .route("discovery-server", r -> r.path("/eureka/web").filters(f -> f.setPath("/")).uri("http://localhost:8761"))
