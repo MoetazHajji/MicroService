@@ -10,7 +10,12 @@ import java.util.Set;
 @Service
 public interface ICommandService {
     Command addCommand(Command command);
+
+
+
+
     Command modifyCommand(Command command);
+
     void deleteCommand(Long id);
     Command getCommandById(Long id);
     Set<Command> getAllCommands();

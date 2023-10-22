@@ -29,7 +29,7 @@ public class CommandController {
 
     @Operation(description = "Modify Command")
     @PutMapping("modify")
-    public Command modifyCommand(@RequestBody Command command){
+    public Command modifyCommand(@RequestBody Command command ) {
         return commandService.modifyCommand(command);
     }
 
