@@ -50,6 +50,32 @@ services:
     networks:
       - spring-network
 
+  hr-service:
+    container_name: hr-service
+    build: Hr-Service
+    ports:
+      - "8181:8181"
+    image: "hr-service"
+    environment:
+      - SPRING_DATASOURCE_URL= jdbc:mysql://db-mysql:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME= root
+      - SPRING_DATASOURCE_PASSWORD= root
+      - spring.jpa.show-sql=true
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE= http://serviceregistry:8761/eureka/
+      - spring.jpa.database-platform=org.hibernate.dialect.MySQL5Dialect
+      - spring.cloud.config.import-check.enabled=false
+      - spring.cloud.config.fail-fast=true
+      - eureka.client.register-with-eureka=true
+      - logging.pattern.console= =%d{yyyy-MM-dd HH:mm:ss} - %-5level- %logger{45} - %msg %n
+    depends_on:
+      - eureka
+      - db-mysql
+      - api-gateway
+    networks:
+      - spring-network
+
   db-mysql:
     image: "mysql:5.6"
     container_name: db-mysql
