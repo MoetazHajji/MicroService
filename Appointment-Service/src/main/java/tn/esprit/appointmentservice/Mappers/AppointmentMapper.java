@@ -32,8 +32,11 @@ public class AppointmentMapper {
                 .createdAt (appointment.getCreatedAt())
                 .comments(appointment.getComments())
                 .FirstVisit (appointment.isFirstVisit())
-                .appointmentStart(appointment.getAppointmentDate().atTime(appointment.getAppointmentStartTime()))
-                .appointmentEnd(appointment.getAppointmentDate().atTime(appointment.getAppointmentEndTime()))
+                .appointmentStart((appointment.getAppointmentStartTime() == null ? null :
+                        appointment.getAppointmentDate().atTime(appointment.getAppointmentStartTime())))
+                .appointmentEnd((appointment.getAppointmentEndTime() == null ? null :
+                        appointment.getAppointmentDate().atTime(appointment.getAppointmentStartTime())
+                        ))
                 .appointmentStatus(appointment.getAppointmentStatus())
                 .build();
     }

@@ -19,15 +19,20 @@ public class AppointmentController {
     private AppointmentService iAppointmentService;
     @Autowired
     public AppointmentController(@Qualifier("Appointment") AppointmentService iAppointmentService){this.iAppointmentService = iAppointmentService;}
-    @GetMapping
+    @GetMapping("/getAll")
     public List<AppointmentDto> SelectAll () {return  iAppointmentService. SelectAll () ;}
-    @GetMapping("{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<AppointmentDto> SelectBy (@PathVariable int id) {return ResponseEntity.ok( iAppointmentService.SelectBy ( id)) ;}
-     @PostMapping
+     @PostMapping("/add")
      public AppointmentDto Insert(@RequestBody AppointmentDto appointmentDto) {return  iAppointmentService.Insert(   appointmentDto);}
-    @PutMapping
-    public  ResponseEntity<AppointmentDto> update( @RequestBody AppointmentDto appointmentDto){return  ResponseEntity.ok( iAppointmentService.update(  appointmentDto));}
-    @DeleteMapping("{id}")
+    @PutMapping("/update/{id}")
+    public  ResponseEntity<AppointmentDto> update( @PathVariable("id") int id, @RequestBody AppointmentDto appointmentDto){
+        return  ResponseEntity.ok(   iAppointmentService.update( id , appointmentDto));
+
+    }
+
+
+    @DeleteMapping("/delete/{id}")
     public  ResponseEntity<HttpStatus> delete(@PathVariable  Integer id ){   iAppointmentService.delete( id ); return new ResponseEntity<HttpStatus>(HttpStatus.NO_CONTENT);}
 
 

@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service("Appointment")
@@ -36,7 +37,7 @@ public class AppointmentService {
 
     public AppointmentDto Insert(AppointmentDto object) {
         object.setCreatedAt(LocalDateTime.now());
-        object.setAppointmentStatus(this.Verify( AppointmentMapper.mapToEntity( object )  ));
+       // object.setAppointmentStatus(this.Verify( AppointmentMapper.mapToEntity( object )  ));
         Appointment appointment = AppointmentMapper.mapToEntity(object);
         return AppointmentMapper.mapToDto( appointmentRepository.save(appointment));
     }
@@ -46,7 +47,7 @@ public class AppointmentService {
     @Transactional
     public  AppointmentDto  update(AppointmentDto object) {
         Appointment appointment = appointmentRepository.findById(object.getId()).orElse(null)  ;
-        object.setAppointmentStatus(this.Verify( AppointmentMapper.mapToEntity( object )  ));
+       // object.setAppointmentStatus(this.Verify( AppointmentMapper.mapToEntity( object )  ));
         appointment.setReason(object.getReason());
         //appointment.setDate_sending(object.getDate_sending());
         appointment.setComments(object.getComments());
@@ -54,6 +55,19 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
         return  AppointmentMapper.mapToDto(appointment) ;
     }
+
+    @Transactional
+    public  AppointmentDto  update(long id , AppointmentDto object) {
+        Optional<Appointment> appointment = appointmentRepository.findById(id) ;
+        if (!appointment.isPresent()){return null;}
+        Appointment appt   = appointment.get();
+        appt.setReason(object.getReason());
+        appt.setComments(object.getComments());
+        appt.setFirstVisit(object.isFirstVisit());
+        appt = appointmentRepository.save(appt);
+        return  AppointmentMapper.mapToDto(appt) ;
+    }
+
     /* @Transactional
      public  AppointmentDto  updateAppointmentByAccount(AppointmentDto object,long idAccount) {
          Account account = accountRepository.findById(idAccount).orElse(null)  ;
@@ -109,7 +123,7 @@ public class AppointmentService {
 //    }
 
 
-    public AppointmentStatus Verify(Appointment appointment ) {
+ /*   public AppointmentStatus Verify(Appointment appointment ) {
         AppointmentStatus appointmentStatus =  AppointmentStatus.Available;
 //        if (!iTimeOffService.verify (appointment.getAppointmentDate() ,appointment.getAppointmentStartTime(), appointment.getAppointmentEndTime()))
 //        {appointmentStatus =  AppointmentStatus.Booked; }
@@ -120,7 +134,7 @@ public class AppointmentService {
         LocalDateTime dateTimeApptStart = appointment.getAppointmentDate().atTime(appointment.getAppointmentEndTime());
         if (  ( LocalDateTime.now().compareTo(dateTimeApptStart) > 0)  ){ appointmentStatus =  AppointmentStatus.Booked; }
         return appointmentStatus;
-    }
+    }*/
 
 
 

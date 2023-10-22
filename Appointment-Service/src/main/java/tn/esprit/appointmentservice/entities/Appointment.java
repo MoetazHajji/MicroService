@@ -2,6 +2,7 @@ package tn.esprit.appointmentservice.entities;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -39,7 +40,8 @@ public class Appointment implements Serializable {
     @Column(name = "appointment_date", columnDefinition = "DATE")
     private LocalDate appointmentDate;
 
-    @Column(name = "appointment_start_time", columnDefinition = "TIME")
+
+    @Column(name = "appointment_start_time",columnDefinition = "TIME" )
     private LocalTime appointmentStartTime;
 
 
@@ -50,13 +52,19 @@ public class Appointment implements Serializable {
     @Enumerated(EnumType.STRING)
     AppointmentStatus appointmentStatus;
 
-    @Column(name = "id_appointment" )
-    Long idAccount;
-
 
 
     public Appointment(String reason, String comments, boolean firstVisit) {
         this.reason=reason;   this.comments=comments;  this.firstVisit=firstVisit;
+    }
+
+    public Appointment(String reason, LocalDateTime createdAt, String comments, boolean firstVisit, LocalTime appointmentStartTime, AppointmentStatus appointmentStatus) {
+        this.reason = reason;
+        this.createdAt = createdAt;
+        this.comments = comments;
+        this.firstVisit = firstVisit;
+        this.appointmentStartTime = appointmentStartTime;
+        this.appointmentStatus = appointmentStatus;
     }
 
     public Appointment(String reason, String comments, boolean firstVisit, LocalDate appointmentDate, LocalTime appointmentStartTime, LocalTime appointmentEndTime) {

@@ -22,8 +22,8 @@ public class AppointmentDto {
     LocalDateTime appointmentStart;
     LocalDateTime appointmentEnd;
     AppointmentStatus appointmentStatus;
-    String firstName;
-    String lastName;
+    //String firstName;
+    //String lastName;
 
     boolean FirstVisit ;
     public AppointmentDto(String reason) {
