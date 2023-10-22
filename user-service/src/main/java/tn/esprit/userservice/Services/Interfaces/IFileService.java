@@ -1,4 +1,4 @@
-package tn.esprit.userservice.Services;
+package tn.esprit.userservice.Services.Interfaces;
 
 import org.springframework.web.multipart.MultipartFile;
 

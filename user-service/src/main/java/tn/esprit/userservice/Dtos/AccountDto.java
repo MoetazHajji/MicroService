@@ -4,9 +4,11 @@ package tn.esprit.userservice.Dtos;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import tn.esprit.userservice.Entitys.Gender;
+import tn.esprit.userservice.Entitys.Roles;
 import tn.esprit.userservice.Entitys.StateRegion;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -22,6 +24,14 @@ public class AccountDto {
     //LocalDateTime createdAt;
     //@NotBlank(message = "AccountDto : firstname NotBlank")
     //@Size(min = 2, max = 50 , message = "AccountDto : firstname must between 2 - 50")
+    String username;
+    Roles role;
+    boolean enabled;
+    String code;
+    LocalDateTime createdAt ;
+
+
+
     String firstname;
     String lastname;
     int cin;

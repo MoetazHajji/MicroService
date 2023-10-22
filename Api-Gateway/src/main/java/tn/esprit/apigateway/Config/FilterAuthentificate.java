@@ -1,6 +1,7 @@
 package tn.esprit.apigateway.Config;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -16,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 
-
+@Slf4j
 @Component
 public class FilterAuthentificate extends AbstractGatewayFilterFactory<FilterAuthentificate.Config> {
     @Autowired
@@ -26,52 +27,49 @@ public class FilterAuthentificate extends AbstractGatewayFilterFactory<FilterAut
         super(Config.class);
     }
     @NoArgsConstructor
-    public static class Config {
-        // Put the configuration properties
-    }
+    public static class Config {/* Put the configuration properties*/}
 
     @Override
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
             ServerHttpRequest request = (ServerHttpRequest) exchange.getRequest();
-            System.out.println("||||||||||||||||  "+ request.getPath() +"   |||||||||||||||||");
-
-
-
-            if (!request.getHeaders().containsKey("Authorization")) {
-                ServerHttpResponse response = exchange.getResponse();
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
-                return response.setComplete();
-            }
-
-
-            final String token = request.getHeaders().getOrEmpty("Authorization").get(0);
-            System.out.println(token);
-
-
+//            System.out.println("||||||||||||||||  "+ request.getPath() +"   |||||||||||||||||");
+//            if (!request.getHeaders().containsKey("Authorization")) {
+//                ServerHttpResponse response = exchange.getResponse();
+//                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+//                return response.setComplete();
+//            }
+//            final String token = request.getHeaders().getOrEmpty("Authorization").get(0);
+//            System.out.println(token);
             return webClient.build()
                     .get()
                     .uri("http://user-service/biochar/user-service"+request.getPath())
-                    .header("Authorization",   token)
+//                    .header("Authorization",   token)
+                    .headers(httpHeaders -> {
+                        if (request.getHeaders().containsKey("Authorization")) {
+                            final String token = request.getHeaders().getOrEmpty("Authorization").get(0);
+                            httpHeaders.set("Authorization", token);
+                        }
+                    })
                     .retrieve().bodyToMono(String.class)
-                    .map(userDto -> {
+                    .map(reponse_body -> {
+                        log.debug("reponse body : " + String.valueOf(reponse_body));
                         exchange.getRequest()
                                 .mutate()
-                                .header("X-auth-user-id", String.valueOf(userDto));
+                                .header("X-auth-user-id", String.valueOf(reponse_body));
                         return exchange;
                     }).flatMap(chain::filter).onErrorResume(error -> {
-                        System.out.println("Error Happened");
                         HttpStatus errorCode = null;
                         String errorMsg = "";
                         if (error instanceof WebClientResponseException) {
                             WebClientResponseException webCLientException = (WebClientResponseException) error;
                             errorCode = webCLientException.getStatusCode();
                             errorMsg = webCLientException.getStatusText();
-                            System.out.println( "1111" + errorCode +"  "+errorMsg );
+                            log.error( "error code : " +  errorCode +" - error msg : "+errorMsg);
                         } else {
                             errorCode = HttpStatus.BAD_GATEWAY;
                             errorMsg = HttpStatus.BAD_GATEWAY.getReasonPhrase();
-                            System.out.println( "22222" +  errorCode +"  "+errorMsg );
+                            log.error( "error code : " +  errorCode +" - error msg : "+errorMsg);
                         }
                         return  onError( exchange,  errorMsg,  errorCode);
                     });
