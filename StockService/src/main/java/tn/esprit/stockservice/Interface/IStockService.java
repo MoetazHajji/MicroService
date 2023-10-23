@@ -1,5 +1,6 @@
 package tn.esprit.stockservice.Interface;
 
+import tn.esprit.stockservice.Entity.Product;
 import tn.esprit.stockservice.Entity.Stock;
 
 import java.util.Set;
@@ -10,4 +11,6 @@ public interface IStockService {
     void deleteStock(Long id);
     Stock getStockById(Long id);
     Set<Stock> getAllStock();
+    Stock withdrawStock(Double quantity,Long idstock);
+    Stock addProductToStock(Long id, Long idProduct);
 }

@@ -15,7 +15,6 @@ public class ProductMapper {
                 .count_order(productDto.getCount_order())
                 .size_product(productDto.getSize_product())
                 .type_product(productDto.getType_product())
-                .stocks(productDto.getStocks())
                 .build();
     }
 
@@ -30,7 +29,6 @@ public class ProductMapper {
                 .count_order(product.getCount_order())
                 .type_product(product.getType_product())
                 .size_product(product.getSize_product())
-                .stocks(product.getStocks())
                 .build();
     }
 }
