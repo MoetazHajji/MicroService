@@ -45,4 +45,9 @@ public class StockController {
     public StockDto getStock(@PathVariable("id") Long stockId) {
         return StockMapper.mapToDto(stockService.getStockById(stockId));
     }
+
+    @PutMapping("/affectToStock/{id}/{idP}")
+    public StockDto affectProductToStock(@PathVariable("id") Long id ,@PathVariable("idP") Long idP){
+        return StockMapper.mapToDto(stockService.addProductToStock(id,idP));
+    }
 }

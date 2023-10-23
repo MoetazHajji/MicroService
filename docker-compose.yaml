@@ -31,18 +31,12 @@ services:
       - "8180:8180"
     image: "stock-service"
     environment:
-      - SPRING_DATASOURCE_URL= jdbc:mysql://db-mysql:3306/biochar-database?useUnicode=true&useJDBCCompliantTimezoneShift=true&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME= root
-      - SPRING_DATASOURCE_PASSWORD= root
-      - spring.jpa.show-sql=true
-      - spring.jpa.hibernate.ddl-auto=update
-      - spring.datasource.driver-class-name=com.mysql.jdbc.Driver
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE= http://serviceregistry:8761/eureka/
-      - spring.jpa.database-platform=org.hibernate.dialect.MySQL5Dialect
-      - spring.cloud.config.import-check.enabled=false
-      - spring.cloud.config.fail-fast=true
-      - eureka.client.register-with-eureka=true
-      - logging.pattern.console= =%d{yyyy-MM-dd HH:mm:ss} - %-5level- %logger{45} - %msg %n
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-mysql:3306/biochar-database?autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
     depends_on:
       - eureka
       - db-mysql
@@ -54,10 +48,14 @@ services:
     image: "mysql:5.6"
     container_name: db-mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=root
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: biochar-database
     ports:
       - "3306:3306"
     restart: unless-stopped
+    networks:
+      - spring-network
 
 networks:
   spring-network:
