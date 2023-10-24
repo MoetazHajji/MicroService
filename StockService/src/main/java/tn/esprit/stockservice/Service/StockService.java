@@ -3,7 +3,9 @@ package tn.esprit.stockservice.Service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.stockservice.Entity.Product;
+import tn.esprit.stockservice.Entity.State;
 import tn.esprit.stockservice.Entity.Stock;
+import tn.esprit.stockservice.Entity.Type_product;
 import tn.esprit.stockservice.Exception.ElementNotFoundException;
 import tn.esprit.stockservice.Exception.NoProductException;
 import tn.esprit.stockservice.Exception.OutOfStockException;
@@ -13,6 +15,7 @@ import tn.esprit.stockservice.Repository.IProductRepository;
 import tn.esprit.stockservice.Repository.IStockRepository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +29,14 @@ public class StockService implements IStockService {
 
     @Override
     public Stock addStock(Stock stock) {
-        return stockRepository.save(stock);
+        stock.setDate(LocalDate.now());
+        stockRepository.save(stock);
+        if(stock.getFree_storage()==null && stock.getUsed_storage()==null){
+            stock.setFree_storage(stock.getStorage());
+            stock.setUsed_storage(0.0);
+            stockRepository.save(stock);
+        }
+        return stock;
     }
 
     @Override
@@ -73,27 +83,83 @@ public class StockService implements IStockService {
     }
 
     @Override
+    public Set<Product> getStockProduct(Long id) {
+        return stockRepository.getStockProduct(id);
+    }
+
+
+    @Override
     @Transactional
-    public Stock addProductToStock(Long id, Long idProduct) {
-        Stock stock = this.stockRepository.findById(id).orElseThrow(() -> new ElementNotFoundException("Stock with id " + id + " not found : "));
-        Product product = this.productRepository.findById(idProduct).orElseThrow(() -> new ElementNotFoundException("Product with id " + idProduct + " not found : "));
-        System.out.println("Product: " + product.toString() + "Stock: " + stock.toString());
-        this.stockRepository.save(stock);
+    public Stock addProductToStock(Long id, Long idProduct,Double quantity) {
+        Stock stock = stockRepository.findById(id).orElseThrow(() -> new ElementNotFoundException("Stock with id " + id + " not found : "));
+        Product product = productRepository.findById(idProduct).orElseThrow(() -> new ElementNotFoundException("Product with id " + idProduct + " not found : "));
+        stockRepository.save(stock);
+        if(stock.getUsed_storage()==null){
+            stock.setUsed_storage(quantity);
+            stock.setFree_storage(stock.getStorage() - quantity);
+            Double oldQuantity = product.getQuantity();
+            product.setQuantity(oldQuantity - quantity);
+            stockRepository.save(stock);
+        }
         if (stock.getProducts() == null) {
-            //            Long nbquantity = stock.getNbProduct();
-//            nbquantity = nbquantity + quantity;
-//            Long productQuantity = product.getQuantity();
-//            productQuantity = productQuantity - quantity;
-//            stock.setNbProduct(nbquantity);
+            stock.setTotal_quantity(quantity);
+            stock.setUsed_storage(quantity);
+            stock.setFree_storage(stock.getStorage() - quantity);
+            Double oldQuantity = product.getQuantity();
+            product.setQuantity(oldQuantity - quantity);
             Set<Product> productList = new HashSet<>();
             productList.add(product);
             stock.setProducts(productList);
         } else {
+            stock.setTotal_quantity(quantity);
+            stock.setUsed_storage(quantity);
+            stock.setFree_storage(stock.getStorage() - quantity);
+            Double oldQuantity = product.getQuantity();
+            product.setQuantity(oldQuantity - quantity);
+
+            if (product.getType_product().equals(Type_product.REAGENT) && stock.getFree_storage() <= stock.getStorage()){
+                System.out.println("hello3");
+                Double quantityWithSize = quantity * product.getSize_product();
+                Double newQuantity = product.getQuantity() - quantityWithSize;
+                Long nbProducts = stockRepository.NbProductsInStock(id);
+                Double totQantity = stock.getTotal_quantity() + quantityWithSize;
+                /************** storage ******************/
+                Double updatedFreeStorage = stock.getStorage() - totQantity;
+                /************** storage ******************/
+                stock.setNbProduct(nbProducts);
+                stock.setTotal_quantity(totQantity);
+                product.setQuantity(newQuantity);
+                stock.setState(State.AVAILABLE);
+                stock.setUsed_storage(totQantity);
+                stock.setFree_storage(updatedFreeStorage);
+            } else if (product.getType_product().equals(Type_product.EQUIPMENT) && stock.getFree_storage() <= stock.getStorage()) {
+                System.out.println("hello4");
+                Double quantityWithSize = quantity * product.getSize_product();
+                Double newQuantity = product.getQuantity() - quantityWithSize;
+                Long nbProducts = stockRepository.NbProductsInStock(id);
+                Double totQantity = stock.getTotal_quantity() +quantityWithSize;
+                /************** storage ******************/
+                Double updatedFreeStorage = stock.getStorage() - totQantity;
+                /************** storage ******************/
+                stock.setNbProduct(nbProducts);
+                stock.setTotal_quantity(totQantity);
+                product.setQuantity(newQuantity);
+                stock.setState(State.AVAILABLE);
+                stock.setUsed_storage(totQantity);
+                stock.setFree_storage(updatedFreeStorage);
+                stock.setNbProduct(nbProducts);
+            }
             stock.getProducts().add(product);
+        }
+        if (product.getQuantity() <0 || stock.getUsed_storage()<0  ){
+            throw new NoProductException("Product quantity or stock quantity or storage can't be negative");
+        }
+        if (stock.getFree_storage() == stock.getStorage() ) {
+            stock.setState(State.OUT_OF_STOCK);
+            throw new OutOfStockException("Product is out of stock ");
         }
 
 
         return stock;
     }
-
 }
