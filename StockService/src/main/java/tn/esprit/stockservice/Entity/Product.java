@@ -30,7 +30,8 @@ public class Product implements Serializable {
     String description;
     String image;
     Long count_order;
-    Long Quantity;
+
+    Double quantity;
 
     @Enumerated(EnumType.STRING)
     Type_product type_product;

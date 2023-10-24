@@ -24,5 +24,6 @@ public class ProductDto {
     String image;
     Long count_order;
     Type_product type_product;
+    Double quantity;
     Set<Stock> stocks;
 }
