@@ -112,7 +112,27 @@ services:
       - "7459:7459"
     image: "commande-service"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:h2:~/Analyse-servic
+      SPRING_DATASOURCE_URL: jdbc:h2:~/commande-service
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD:
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.h2.Driver
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+      spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.H2Dialect
+    depends_on:
+      - eureka
+      - api-gateway
+    networks:
+      - spring-network
+
+  user-service:
+    container_name: user-service
+    build: user-service
+    ports:
+      - "6992:6992"
+    image: "user-service"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:h2:~/user
       SPRING_DATASOURCE_USERNAME: sa
       SPRING_DATASOURCE_PASSWORD:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
