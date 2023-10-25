@@ -129,7 +129,7 @@ services:
     container_name: user-service
     build: user-service
     ports:
-      - "7459:7459"
+      - "6992:6992"
     image: "user-service"
     environment:
       SPRING_DATASOURCE_URL: jdbc:h2:~/user
