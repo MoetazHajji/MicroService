@@ -3,6 +3,7 @@ package com.example.commande.Service;
 import com.example.commande.Entity.Command;
 import com.example.commande.Entity.CommandLigne;
 import com.example.commande.Exception.ElementNotFoundException;
+import com.example.commande.Interfaces.AccountClient;
 import com.example.commande.Interfaces.ICommandService;
 import com.example.commande.Repository.ICommandLigneRepository;
 import com.example.commande.Repository.ICommandRepository;
@@ -20,9 +21,12 @@ public class CommandService implements ICommandService {
 
     ICommandRepository commandRepository;
     ICommandLigneRepository ligneRepository;
+    AccountClient accountClient;
 
     @Override
-    public Command addCommand(Command command) {
+    public Command addCommand(Command command , Long idA) {
+        Long idAccount = accountClient.SelectById(idA).getBody().getId();
+        command.setIdA(idAccount);
         return commandRepository.save(command);
     }
 
@@ -35,7 +39,11 @@ public class CommandService implements ICommandService {
 
 
 
-
+    @Override
+    public List<Command> retrieveLAByAccountId(Long idA) {
+        List<Command> commandes = commandRepository.findCommandByIdA(idA);
+        return commandes    ;
+    }
 
 
 

@@ -39,4 +39,6 @@ public class Command implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "command")
     Set<CommandLigne> commandLignes;
+
+    Long idA;
 }

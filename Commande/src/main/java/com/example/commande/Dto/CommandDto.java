@@ -20,5 +20,7 @@ public class CommandDto {
     Long idProduct;
     String name_product;
     double price_product;
+    Long account_id;
+    AccountDto accountDto;
 }
 
