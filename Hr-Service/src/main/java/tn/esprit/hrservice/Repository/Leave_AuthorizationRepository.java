@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface Leave_AuthorizationRepository extends JpaRepository<Leave_Authorization, Long> {
 
+    List<Leave_Authorization> findLeave_AuthorizationsByIdA(Long idA);
 }
