@@ -24,6 +24,7 @@ public class Sample implements Serializable {
     private Integer idSample;
     private Date date;
     private String numSample;
+    Long idA;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="sample")
     @JsonIgnore

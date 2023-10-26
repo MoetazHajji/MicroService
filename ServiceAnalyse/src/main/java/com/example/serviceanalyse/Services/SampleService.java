@@ -1,7 +1,10 @@
 package com.example.serviceanalyse.Services;
 
+import com.example.serviceanalyse.Dto.SampleDto;
 import com.example.serviceanalyse.Entities.Sample;
+import com.example.serviceanalyse.Interfaces.AccountClient;
 import com.example.serviceanalyse.Interfaces.ISample;
+import com.example.serviceanalyse.Mappers.SampleMapper;
 import com.example.serviceanalyse.Repository.SampleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class SampleService implements ISample {
-
+    AccountClient accountClient;
+    SampleMapper leaveAuthorizationMapper;
     private final SampleRepository sampleRepository;
 
 
@@ -38,12 +42,20 @@ public class SampleService implements ISample {
 
         return  sampleRepository.findAll();
 
+
+
     }
+    @Override
+    public SampleDto addAndAssignLAToAccount(Sample la, Long idA) {
+        Long idAccount = accountClient.SelectById(idA).getBody().getId();
 
+        Sample leaveAuthorization = sampleRepository.save(la);
+        leaveAuthorization.setIdA(idAccount);
 
+        sampleRepository.save(leaveAuthorization);
 
-
-
+        return leaveAuthorizationMapper.mapToDto(leaveAuthorization);
+    }
 
 
 }

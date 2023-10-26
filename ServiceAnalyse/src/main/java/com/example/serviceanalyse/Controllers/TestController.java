@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("Test")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
+
 public class TestController {
 
     private final ITest iTest;
