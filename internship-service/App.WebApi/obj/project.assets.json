@@ -10587,11 +10587,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Worker\\esprit-5eme\\App-Web-Distribuees-Micro-service\\projects\\internship-service\\App.WebApi\\App.WebApi.csproj",
+      "projectUniqueName": "C:\\Worker\\esprit-5eme\\App-Web-Distribuees-Micro-service\\projects-team\\MicroService\\internship-service\\App.WebApi\\App.WebApi.csproj",
       "projectName": "App.WebApi",
-      "projectPath": "C:\\Worker\\esprit-5eme\\App-Web-Distribuees-Micro-service\\projects\\internship-service\\App.WebApi\\App.WebApi.csproj",
+      "projectPath": "C:\\Worker\\esprit-5eme\\App-Web-Distribuees-Micro-service\\projects-team\\MicroService\\internship-service\\App.WebApi\\App.WebApi.csproj",
       "packagesPath": "C:\\Users\\borhen\\.nuget\\packages\\",
-      "outputPath": "C:\\Worker\\esprit-5eme\\App-Web-Distribuees-Micro-service\\projects\\internship-service\\App.WebApi\\obj\\",
+      "outputPath": "C:\\Worker\\esprit-5eme\\App-Web-Distribuees-Micro-service\\projects-team\\MicroService\\internship-service\\App.WebApi\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

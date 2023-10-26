@@ -73,7 +73,6 @@ public class KeyCloakService implements IKeyCloakService {
     }
     @Override
     public void assignRealmRoleToUser(String userName, String role_name){
-        //String user_id =  selectByUsername(userName).get(0).getId();
         String client_id = getRealmResource().clients().findByClientId(keycloakConfig.clientId).get(0).getId();
         String userId = getRealmResource().users().search(userName).get(0).getId();
         UserResource user = getRealmResource().users().get(userId);
@@ -90,7 +89,6 @@ public class KeyCloakService implements IKeyCloakService {
     @Override
     public boolean isCorrectUserName (String userName){
         List<UserRepresentation> user = this.selectByUsername( userName);
-        System.out.println(user.size());
         if ( user.size()>0){return true;}
         return false;
     }

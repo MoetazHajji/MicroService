@@ -15,8 +15,12 @@ public class MyConfigInitParameters {
     private String file_forgotPassword_HTML;
     @Value("${myApp.file.ConfirmMail_HTML}")
     private String file_ConfirmMail_HTML;
+    @Value("${myApp.file.PermissionRole_HTML}")
+    private String file_PermissionRole_HTML;
     @Value("${myApp.file.defaultUserPhoto}")
     private String file_defaultUserPhoto;
+    @Value("${myApp.file.defaultCoverPhoto}")
+    private String file_defaultCoverPhoto;
     @Value("${myApp.link.WebPage}")
     private String pageHomeWebPage;
     @Value("${myApp.link.Path.signIn}")
@@ -39,7 +43,9 @@ public class MyConfigInitParameters {
         //http://localhost:8099/biochar/user-service/attachment/download/
         FileService.link_forgotPassword_HTML=file_forgotPassword_HTML;
         FileService.link_ConfirmMail_HTML=file_ConfirmMail_HTML;
+        FileService.link_PermissionRole_HTML=file_PermissionRole_HTML;
         FileService.defaultUserPhoto=file_defaultUserPhoto;
+        FileService.defaultCoverPhoto=file_defaultCoverPhoto;
         FileService.pageHomeLink= pageHomeWebPage;
         FileService.pathSignIn= pathLinkSignIn;
         FileService.pathError=pathLinkError;

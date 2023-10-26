@@ -38,6 +38,7 @@ public class SecurityConfig {
                                 .antMatchers(HttpMethod.POST, "/keycloak/logout").permitAll()
                                 .antMatchers(HttpMethod.POST, "/account/register").permitAll()
                                 .antMatchers(HttpMethod.GET, "/attachment/**").permitAll()
+                                .antMatchers(HttpMethod.GET, "/account/confirm-email/**").permitAll()
                                 .anyRequest().authenticated());
 
 

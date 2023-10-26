@@ -99,4 +99,16 @@ public class AccountController {
                                                                @PathVariable("currentpassword")  String currentPassword,
                                                                @PathVariable("newpassword")  String newPassword){
         return  ResponseEntity.ok((MsgReponseStatusDto) iAccountService.updatePassword(usename,currentPassword,newPassword));}
+
+    @PutMapping("update-role-permission/{username}/{currentRole}/{newRole}")
+    public ResponseEntity<MsgReponseStatusDto>  permissionUpdateRole(@PathVariable("username")  String usename,
+                                                                     @PathVariable("currentRole")  Roles currentRole,
+                                                                     @PathVariable("newRole")  Roles newRole) throws IOException, InterruptedException, MessagingException{
+        return  ResponseEntity.ok((MsgReponseStatusDto) iAccountService.permissionUpdateRole(usename,currentRole , newRole));}
+
+    @PutMapping("update-role/{username}/{role}")
+    public RedirectView  updateRole(@PathVariable("username")  String usename, @PathVariable("role")  Roles role) throws IOException, InterruptedException, MessagingException{
+        if ( iAccountService.updateRole(usename,role).getStatus() == ReponseStatus.SUCCESSFUL)
+        { return new RedirectView(FileService.pageHomeLink+FileService.pathSignIn); }
+        return new RedirectView(FileService.pageHomeLink+FileService.pathError);  }
 }

@@ -66,20 +66,24 @@ public class AccountService extends GenericCRUDService<Account,Long> implements 
     @Transactional
     public Account insert(Account object) {
         object.setCreatedAt(   LocalDateTime.now() );
-        MultipartFile multipartFile = null;
-        Attachment attachment  = null;
+        MultipartFile multipartFileUser,multipartFileCover = null;
+        Attachment attachmentPhoto,attachmentCover  = null;
         try {
-            multipartFile = ifileService.importFileToMultipartFile(FileService.defaultUserPhoto);
+            multipartFileUser = ifileService.importFileToMultipartFile(FileService.defaultUserPhoto);
+            multipartFileCover = ifileService.importFileToMultipartFile(FileService.defaultCoverPhoto);
         } catch (IOException e) {
             throw new tn.esprit.userservice.Exceptions.IOException(e.getMessage());
         }
         try {
-            attachment = iAttachmentService.saveAttachment(multipartFile);
-            attachment.setCategory(Category.PHOTOPROFILE);
+            attachmentPhoto = iAttachmentService.saveAttachment(multipartFileUser);
+            attachmentPhoto.setCategory(Category.PHOTOPROFILE);
+            attachmentCover = iAttachmentService.saveAttachment(multipartFileCover);
+            attachmentCover.setCategory(Category.COVERPICTURE);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        object.addAttachment(attachment);
+        object.addAttachment(attachmentPhoto);
+        object.addAttachment(attachmentCover);
         return  accountRepository.save(object);
     }
     public Account update(Long id,  Account object) {
@@ -190,7 +194,6 @@ public class AccountService extends GenericCRUDService<Account,Long> implements 
                 .datestamp(LocalDate.now())
                 .timestamp(LocalTime.now())
                 .message("To complete next step you should verify confirmation mail").build();
-
     }
     @Override
     public MsgReponseStatusDto confirmEmail(String username ,   String code)
@@ -333,6 +336,56 @@ public class AccountService extends GenericCRUDService<Account,Long> implements 
                 .timestamp(LocalTime.now())
                 .message("Successful update role and state enable user").build();
     }
+
+    @Override
+    @Transactional
+    public MsgReponseStatusDto permissionUpdateRole(String username , Roles currentRole , Roles newRole) throws IOException, InterruptedException, MessagingException {
+        if( !accountRepository. isCorrectUserName( username ))
+        {   return MsgReponseStatusDto.builder()
+                .status(ReponseStatus.UNSUCCESSFUL)
+                .datestamp(LocalDate.now())
+                .timestamp(LocalTime.now())
+                .message("Cannot found username verify you enter correct").build();}
+
+        String file =  ifileService.Edit_PermissionRolePage ( username ,  currentRole,newRole,
+                MyConfigInitParameters.staticLinkServiceUser +"/account/update-role/"+username+"/"+newRole);
+
+        mailSender.connect();
+        List<Account> accountList =  accountRepository.findAccountsByRole(Roles.Chief_Service);
+        for ( Account account : accountList ){
+            Msg msg = Msg.builder().subject("Request for User Profile Role Change")
+                    .email(account.getEmail())
+                    .text("body")
+                    .bodyContents(new ArrayList<BodyContent>(){{add(BodyContent.builder()
+                            .content(file).
+                            type(TypeBody.HTML).build());}}).build();
+            mailSender.sendingMultiBodyContent(msg);
+        }
+        return MsgReponseStatusDto.builder()
+                .status(ReponseStatus.SUCCESSFUL)
+                .datestamp(LocalDate.now())
+                .timestamp(LocalTime.now())
+                .message("Successful update role and state enable user").build();
+    }
+    @Override
+    @Transactional
+    public MsgReponseStatusDto updateRole(String username,Roles role){
+        if( !accountRepository. isCorrectUserName( username )||(!iKeyCloakService.isCorrectUserName (username))){
+            return MsgReponseStatusDto.builder()
+                    .status(ReponseStatus.UNSUCCESSFUL)
+                    .datestamp(LocalDate.now())
+                    .timestamp(LocalTime.now())
+                    .message("Cannot found username verify you enter correct").build();}
+        Account account = accountRepository.findAccountByUsername( username ).get();
+        account.setRole(role);
+        iKeyCloakService.assignRealmRoleToUser(username, role.toString());
+        return MsgReponseStatusDto.builder()
+                .status(ReponseStatus.SUCCESSFUL)
+                .datestamp(LocalDate.now())
+                .timestamp(LocalTime.now())
+                .message("Successful update role and state enable user").build();
+    }
+
     private int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }

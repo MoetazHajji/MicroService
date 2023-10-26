@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
+    List<Account> findAccountsByRole(Roles role);
     Optional<Account>   findAccountByUsername( String username   );
     @Query("select ac from  Account ac WHERE ac.username IN :usernames")
     List<Account> findAccountDtosByUsernameIn(String[] usernames);
