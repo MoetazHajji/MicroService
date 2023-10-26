@@ -9,12 +9,14 @@ import java.util.Set;
 
 @Service
 public interface ICommandService {
-    Command addCommand(Command command);
 
 
 
+    Command addCommand(Command command, Long idA);
 
     Command modifyCommand(Command command);
+
+    List<Command> retrieveLAByAccountId(Long idA);
 
     void deleteCommand(Long id);
     Command getCommandById(Long id);

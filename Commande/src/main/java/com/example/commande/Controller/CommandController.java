@@ -23,8 +23,8 @@ public class CommandController {
 
     @Operation(description = "Add new Command")
     @PostMapping("add")
-    public Command addCommand(@RequestBody Command command){
-        return commandService.addCommand(command);
+    public Command addCommand(@RequestBody Command command, long idA){
+        return commandService.addCommand(command ,idA);
     }
 
     @Operation(description = "Modify Command")
@@ -33,6 +33,14 @@ public class CommandController {
         return commandService.modifyCommand(command);
     }
 
+
+
+
+    @Operation(description = "Retreive Command by Id")
+    @GetMapping("getcomandebyidA/{idA}")
+    public List<Command> retrieveLAByAccountId(@PathVariable("idA")Long idA){
+        return commandService.retrieveLAByAccountId(idA);
+    }
     @Operation(description = "Delete Command")
     @DeleteMapping("delete/{id}")
     public void deleteCommand(@PathVariable("id") Long id){
@@ -40,7 +48,7 @@ public class CommandController {
     }
 
     @Operation(description = "Retreive Command by Id")
-    @GetMapping("getAdress/{id}")
+    @GetMapping("getcommande/{id}")
     public Command getCommandById(@PathVariable("id") Long id){
         return commandService.getCommandById(id);
     }
