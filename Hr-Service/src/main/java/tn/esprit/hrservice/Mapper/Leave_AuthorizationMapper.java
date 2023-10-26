@@ -1,10 +1,12 @@
 package tn.esprit.hrservice.Mapper;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import tn.esprit.hrservice.Dto.Leave_AuthorizationDto;
 import tn.esprit.hrservice.Entity.Leave_Authorization;
 import tn.esprit.hrservice.Entity.State_LA;
 import tn.esprit.hrservice.Entity.Type_LA;
+import tn.esprit.hrservice.Interface.AccountClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +15,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@AllArgsConstructor
 public class Leave_AuthorizationMapper {
 
-    public static Leave_AuthorizationDto mapLeaveAuthToDto(Leave_Authorization leave_authorization){
+    AccountClient accountClient;
+
+    public Leave_AuthorizationDto mapLeaveAuthToDto(Leave_Authorization leave_authorization){
 
         Long days = TimeUnit.HOURS.toDays(leave_authorization.getRemaining_days());
         Long remainingHours = leave_authorization.getRemaining_days() - TimeUnit.DAYS.toHours(days);
@@ -31,11 +36,13 @@ public class Leave_AuthorizationMapper {
                 .cause(leave_authorization.getCause())
                 .type_la(tn.esprit.hrservice.Dto.Type_LA.valueOf(leave_authorization.getType_la().name()))
                 .state_la(tn.esprit.hrservice.Dto.State_LA.valueOf(leave_authorization.getState_la().name()))
+                .account_id(leave_authorization.getIdA())
+                .accountDto(accountClient.SelectById(leave_authorization.getIdA()).getBody())
                 .build();
         return lad;
     }
 
-    public static Leave_Authorization mapLeaveAuthToEntity(Leave_AuthorizationDto leave_authorizationDto){
+    public Leave_Authorization mapLeaveAuthToEntity(Leave_AuthorizationDto leave_authorizationDto){
 
         String inputString = leave_authorizationDto.getRemainingLeaveDays();
         Long num = extractNumbersFromString(inputString);
@@ -50,12 +57,13 @@ public class Leave_AuthorizationMapper {
                 .cause(leave_authorizationDto.getCause())
                 .type_la(Type_LA.valueOf(leave_authorizationDto.getType_la().name()))
                 .state_la(State_LA.valueOf(leave_authorizationDto.getState_la().name()))
+                .idA(leave_authorizationDto.getAccount_id())
                 .build();
         return la;
     }
 
 
-    public static Long extractNumbersFromString(String inputString) {
+    public Long extractNumbersFromString(String inputString) {
         Pattern pattern = Pattern.compile("\\d+");
 
         // Create a matcher object to search for the pattern in the input string

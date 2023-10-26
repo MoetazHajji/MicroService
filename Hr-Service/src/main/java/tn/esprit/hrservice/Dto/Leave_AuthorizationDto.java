@@ -24,5 +24,6 @@ public class Leave_AuthorizationDto {
     Type_LA type_la;
     State_LA state_la;
     Long account_id;
+    AccountDto accountDto;
 
 }

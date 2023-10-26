@@ -35,6 +35,8 @@ public class Leave_Authorization implements Serializable {
     @Enumerated(EnumType.STRING)
     State_LA state_la;
 
+    Long idA;
+
 
 }
 
