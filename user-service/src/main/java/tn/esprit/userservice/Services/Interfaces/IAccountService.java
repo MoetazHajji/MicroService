@@ -20,4 +20,6 @@ public interface IAccountService extends IGenericCRUD<Account,Long> {
     MsgReponseStatusDto updateForgotPassword(String username, String code, String newPassword);
     MsgReponseStatusDto updatePassword(String usename,String currentPassword, String newPassword);
     MsgReponseStatusDto updateRoleAndActivate(String username , Roles role, boolean enabled);
+    MsgReponseStatusDto permissionUpdateRole(String username,Roles currentRole,Roles newRole) throws IOException, InterruptedException, MessagingException;
+    MsgReponseStatusDto updateRole(String username,Roles role);
 }

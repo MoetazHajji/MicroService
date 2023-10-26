@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
+import tn.esprit.userservice.Entitys.Roles;
 import tn.esprit.userservice.Libs.MockMultipartFile;
 import tn.esprit.userservice.Services.Interfaces.IFileService;
 
@@ -23,7 +24,9 @@ import java.nio.file.Paths;
 public class FileService implements IFileService {
     public static String link_forgotPassword_HTML = "";
     public static String link_ConfirmMail_HTML = "";
+    public static String link_PermissionRole_HTML = "";
     public static String  defaultUserPhoto = "";
+    public static String  defaultCoverPhoto = "";
     public static String pageHomeLink = "";
     public static String pathSignIn = "";
     public static String  pathLinkPasswordForgot= "";
@@ -57,6 +60,22 @@ public class FileService implements IFileService {
         herder_username.text( "Hi "+ username+",");
         paragrahecode.text(code);
         sr_link.attr("href", pageHomeLink+pathLinkPasswordForgot+"/"+username +"/"+code );
+        paragrahelink.attr("href",FileService.pageHomeLink);
+        return doc.html();
+    }
+    @Override
+    public String Edit_PermissionRolePage (String username , Roles currentRole,Roles newRole, String link  ) throws IOException {
+        File input = ResourceUtils.getFile(link_PermissionRole_HTML);
+        Document doc = Jsoup.parse(input,  "UTF-8");
+        Element strong_username = doc.getElementById("permission-role-username-strong");
+        Element strong_current_role = doc.getElementById("permission-role-current-role-strong");
+        Element strong_new_role = doc.getElementById("permission-role-new-role-strong");
+        Element link_change_role = doc.getElementById("permission-role-link-change-role-a");
+        Element paragrahelink = doc.getElementById("permission-role-link-page-home-a");
+        strong_username.text(username);
+        strong_current_role.text(currentRole.toString());
+        strong_new_role.text(newRole.toString());
+        link_change_role.attr("href", link );
         paragrahelink.attr("href",FileService.pageHomeLink);
         return doc.html();
     }

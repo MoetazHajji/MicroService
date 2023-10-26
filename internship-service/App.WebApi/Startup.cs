@@ -24,27 +24,14 @@ namespace internship_service
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
-
+        public IConfiguration Configuration { get; } 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<MongoDbSettings>(Configuration.GetSection("MongoDbSettings"));
-
-
-
-
-
             services.AddDiscoveryClient(Configuration);
-            //services.AddMediatR(opts => opts.RegisterServicesFromAssemblyContaining<Startup>());
-            //services.AddPricingRestClient();
-            //services.AddNHibernate(Configuration.GetConnectionString("DefaultConnection"));
-
-
             services.AddControllers();
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -52,20 +39,10 @@ namespace internship_service
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-          app.UseEndpoints(endpoints =>{endpoints.MapControllers();}); //default
-            /*  app.UseEndpoints(endpoints =>
-              {
-                  endpoints.MapControllerRoute(
-                      name: "default",
-                      pattern: "biochar/internship-service/[controller]/[action]/{id?}");
-                  endpoints.MapControllers();
-              });*/
-            app.UseDiscoveryClient();
+           app.UseRouting();
+           //app.UseAuthorization();
+           app.UseEndpoints(endpoints =>{endpoints.MapControllers();}); //default
+           app.UseDiscoveryClient();
         }
     }
 }

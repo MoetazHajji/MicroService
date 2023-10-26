@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Cu1CXNFDUpPgyAFP+lFI6lF+bHFmUrkbqOeOw9bhlnldwX1+3dKWz5OJLAd0pcZxQtLIcuxj9ugRD29lgtXcjA==",
+  "dgSpecHash": "UEa4Z1FBfag2O8gt1oW0Cz+lTiNSn8SVYHENrl6jS6eU8PkxsBgHlIKSUfC+O2T8HL/13haTgbHI3mqsq35Giw==",
   "success": true,
-  "projectFilePath": "C:\\Worker\\esprit-5eme\\App-Web-Distribuees-Micro-service\\projects\\internship-service\\App.WebApi\\App.WebApi.csproj",
+  "projectFilePath": "C:\\Worker\\esprit-5eme\\App-Web-Distribuees-Micro-service\\projects-team\\MicroService\\internship-service\\App.WebApi\\App.WebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\borhen\\.nuget\\packages\\awssdk.core\\3.7.100.14\\awssdk.core.3.7.100.14.nupkg.sha512",
     "C:\\Users\\borhen\\.nuget\\packages\\awssdk.securitytoken\\3.7.100.14\\awssdk.securitytoken.3.7.100.14.nupkg.sha512",

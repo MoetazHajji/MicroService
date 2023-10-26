@@ -13,7 +13,9 @@ public class GatewayConfig {
     @Bean
     public RouteLocator routes(RouteLocatorBuilder builder,  FilterAuthentificate filterAuthentificate) {
         return builder.routes()
-                .route("internship-service", r -> r.path("/biochar/internship-service/**").uri("lb://internship-service"))
+                .route("internship-service", r -> r.path("/biochar/internship-service/**")
+                        .filters(f -> f.filter(filterAuthentificate.apply( new FilterAuthentificate.Config())))
+                        .uri("lb://internship-service"))
                 .route("appointment-service", r -> r.path("/biochar/appointment-service/**").uri("lb://appointment-service"))
                 .route("analysis-service", r -> r.path("/biochar/analysis/**").uri("lb://analysis-service"))
                 .route("stock-service", r -> r.path("/biochar/stock-service/**").uri("lb://stock-service"))
