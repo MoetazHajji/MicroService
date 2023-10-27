@@ -163,6 +163,33 @@ services:
       - db-mysql
     command: [ "start-dev" ]
 
+  internship-service:
+    container_name: internship-service
+    build: internship-service
+    ports:
+      - "36516:36516"
+      - "36517:36517"
+    environment:
+      ASPNETCORE_HTTP_PORT: "36517"
+      ASPNETCORE_URLS: "http://+:36516"
+    depends_on:
+      - eureka
+      - api-gateway
+      - mongo
+    networks:
+      - spring-network
+
+
+  mongo:
+    image: mongo:latest
+    container_name: biochar-mongodb
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - spring-network
+
 
   db-mysql:
     image: "mysql:5.6"
@@ -179,3 +206,6 @@ services:
 
 networks:
   spring-network:
+
+volumes:
+  mongodata:
