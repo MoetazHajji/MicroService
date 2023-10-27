@@ -22,24 +22,24 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf()
-//                .disable()
-//                .authorizeHttpRequests()
-//                .anyRequest()
-//                //.authenticated();
-//                .permitAll(); // Allow all requests without authentication
         http
                 .csrf()
                 .disable()
-                .authorizeRequests(authorizeRequests ->
-                        authorizeRequests
-                                .antMatchers(HttpMethod.POST, "/keycloak/login").permitAll() // Permit all for this specific path
-                                .antMatchers(HttpMethod.POST, "/keycloak/logout").permitAll()
-                                .antMatchers(HttpMethod.POST, "/account/register").permitAll()
-                                .antMatchers(HttpMethod.GET, "/attachment/**").permitAll()
-                                .antMatchers(HttpMethod.GET, "/account/confirm-email/**").permitAll()
-                                .anyRequest().authenticated());
+                .authorizeHttpRequests()
+                .anyRequest()
+                //.authenticated();
+                .permitAll(); // Allow all requests without authentication
+//        http
+//                .csrf()
+//                .disable()
+//                .authorizeRequests(authorizeRequests ->
+//                        authorizeRequests
+//                                .antMatchers(HttpMethod.POST, "/keycloak/login").permitAll() // Permit all for this specific path
+//                                .antMatchers(HttpMethod.POST, "/keycloak/logout").permitAll()
+//                                .antMatchers(HttpMethod.POST, "/account/register").permitAll()
+//                                .antMatchers(HttpMethod.GET, "/attachment/**").permitAll()
+//                                .antMatchers(HttpMethod.GET, "/account/confirm-email/**").permitAll()
+//                                .anyRequest().authenticated());
 
 
         http
