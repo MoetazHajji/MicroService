@@ -145,6 +145,25 @@ services:
     networks:
       - spring-network
 
+  keycloak:
+    container_name: keycloak
+    image: "quay.io/keycloak/keycloak:22.0.4"
+    ports:
+      - "8181:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: mysql
+      KC_DB_URL: jdbc:mysql://db-mysql:3306/keycloak?autoReconnect=true&useSSL=false
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: root
+    networks:
+      - spring-network
+    depends_on:
+      - db-mysql
+    command: [ "start-dev" ]
+
+
   db-mysql:
     image: "mysql:5.6"
     container_name: db-mysql
