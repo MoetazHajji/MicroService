@@ -36,34 +36,34 @@ public class bean_ResetData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         log.info("Bean One of Reset Data  run method Started !!");
-        accountService.insert(ChefService);
-        List<UserRepresentation> listUserRepresentations = iKeyCloakService.selectByUsername(ChefService.getUsername());
-        if(  listUserRepresentations.size() == 0){
-            iKeyCloakService.insert(UserDto.builder()
-                  .firstname(ChefService.getFirstname())
-                  .lastName(ChefService.getFirstname())
-                  .username(ChefService.getUsername())
-                  .password(ChefService.getPassword())
-                  .email(ChefService.getEmail())
-                  .enabled(ChefService.isEnabled())
-                  .build());
-           iKeyCloakService.assignRealmRoleToUser(ChefService.getUsername(), ChefService.getRole().toString());
-          }
-
-
-        accountService.insert(intership);
-        listUserRepresentations = iKeyCloakService.selectByUsername(intership.getUsername());
-        if(  listUserRepresentations.size() == 0){
-            iKeyCloakService.insert(UserDto.builder()
-                    .firstname(intership.getFirstname())
-                    .lastName(intership.getFirstname())
-                    .username(intership.getUsername())
-                    .password(intership.getPassword())
-                    .email(intership.getEmail())
-                    .enabled(intership.isEnabled())
-                    .build());
-            iKeyCloakService.assignRealmRoleToUser(intership.getUsername(), intership.getRole().toString());
-        }
+//        accountService.insert(ChefService);
+//        List<UserRepresentation> listUserRepresentations = iKeyCloakService.selectByUsername(ChefService.getUsername());
+//        if(  listUserRepresentations.size() == 0){
+//            iKeyCloakService.insert(UserDto.builder()
+//                  .firstname(ChefService.getFirstname())
+//                  .lastName(ChefService.getFirstname())
+//                  .username(ChefService.getUsername())
+//                  .password(ChefService.getPassword())
+//                  .email(ChefService.getEmail())
+//                  .enabled(ChefService.isEnabled())
+//                  .build());
+//           iKeyCloakService.assignRealmRoleToUser(ChefService.getUsername(), ChefService.getRole().toString());
+//          }
+//
+//
+//        //accountService.insert(intership);
+//        listUserRepresentations = iKeyCloakService.selectByUsername(intership.getUsername());
+//        if(  listUserRepresentations.size() == 0){
+//            iKeyCloakService.insert(UserDto.builder()
+//                    .firstname(intership.getFirstname())
+//                    .lastName(intership.getFirstname())
+//                    .username(intership.getUsername())
+//                    .password(intership.getPassword())
+//                    .email(intership.getEmail())
+//                    .enabled(intership.isEnabled())
+//                    .build());
+//            iKeyCloakService.assignRealmRoleToUser(intership.getUsername(), intership.getRole().toString());
+//        }
     }
 
     @Autowired
