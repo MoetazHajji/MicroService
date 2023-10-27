@@ -29,20 +29,29 @@ public class CommandService implements ICommandService {
         command.setIdA(idAccount);
         return commandRepository.save(command);
     }
-
     @Override
-    public Command modifyCommand(Command command) {
+    public Command addCommand2(Command command ) {
+        return  commandRepository.save(command);
+    }
+    @Override
+    public Command modifyCommand(Command commandmodifier, Long idA, long id) {
+        Long idAccount = accountClient.SelectById(idA).getBody().getId();
 
-
-        return commandRepository.save(command);
+        Command command1 = commandRepository.findById(id).orElse(null);
+        command1.setNbPoduct(commandmodifier.getNbPoduct());
+        command1.setNotice(commandmodifier.getNotice());
+        command1.setDate(commandmodifier.getDate());
+        command1.setQuantity_product(commandmodifier.getQuantity_product());
+        command1.setTotal_price(commandmodifier.getTotal_price());
+        command1.setIdA(idAccount);
+        return commandRepository.save(command1);
     }
 
 
 
     @Override
     public List<Command> retrieveLAByAccountId(Long idA) {
-        List<Command> commandes = commandRepository.findCommandByIdA(idA);
-        return commandes    ;
+        return commandRepository.findCommandByIdA(idA);
     }
 
 
