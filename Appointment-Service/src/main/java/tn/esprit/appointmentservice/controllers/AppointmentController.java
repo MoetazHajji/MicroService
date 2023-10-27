@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.appointmentservice.Dto.AppointmentDto;
+import tn.esprit.appointmentservice.entities.Appointment;
 import tn.esprit.appointmentservice.services.AppointmentService;
 
 
@@ -37,9 +38,9 @@ public class AppointmentController {
 
 
 
-    @PutMapping ("assignUserToAccount/{idAppointment}/{idAccount}")
-    public AppointmentDto  assignUserToAccount(@PathVariable("idAppointment")  Long idAppointment, @PathVariable("idAccount")  Long idAccount){
-        return   iAppointmentService.assignAppointmentToAccount( idAppointment,  idAccount);
+    @PostMapping ("assignUserToAccount/{idAccount}")
+    public AppointmentDto  assignUserToAccount(@RequestBody  Appointment appointment, @PathVariable("idAccount")  Long idAccount){
+        return   iAppointmentService.assignAppointmentToAccount(appointment ,  idAccount);
     }
 //    @PutMapping ("AddAppointmentAndAssignToAccount/{idAccount}")
 //    public AppointmentDto  AddAppointmentAndAssignToAccount(  @PathVariable("idAccount")  Long idAccount , @RequestBody  AppointmentDto appointmentDto){

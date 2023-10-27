@@ -1,5 +1,6 @@
 package tn.esprit.appointmentservice.entities;
 
+import io.micrometer.core.lang.Nullable;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,6 +24,10 @@ public class Appointment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id" )
     long id;
+
+    @Nullable
+    @Column(name = "idAccount" )
+    Long idAccount;
 
     @Column(name = "reason" )
     String reason;

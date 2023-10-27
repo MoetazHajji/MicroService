@@ -39,7 +39,7 @@ public class AccountController {
     @GetMapping("{id}")
     public ResponseEntity<AccountDto> SelectById (@PathVariable long id) {
         Account account = iAccountService.selectById (id);
-        return ResponseEntity.ok(AccountMapper.mapToDto(account));
+        return ResponseEntity.ok(   account == null ? new AccountDto() :  AccountMapper.mapToDto(account));
     }
     @GetMapping("select-by-username/{username}")
     public  ResponseEntity<AccountDto> selectbyUsername( @PathVariable("username") String  username){

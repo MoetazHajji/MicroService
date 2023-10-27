@@ -22,10 +22,13 @@ public class AppointmentDto {
     LocalDateTime appointmentStart;
     LocalDateTime appointmentEnd;
     AppointmentStatus appointmentStatus;
+    long idAccount;
     //String firstName;
     //String lastName;
 
     boolean FirstVisit ;
+
+    AccountDto accountDto;
     public AppointmentDto(String reason) {
         this.reason = reason;
     }
