@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.appointmentservice.Dto.AppointmentDto;
 import tn.esprit.appointmentservice.Mappers.AppointmentMapper;
 import tn.esprit.appointmentservice.entities.Appointment;
-import tn.esprit.appointmentservice.entities.AppointmentStatus;
+import tn.esprit.appointmentservice.interfaces.AccountClient;
 import tn.esprit.appointmentservice.repositories.AppointmentRepository;
 
 import java.time.LocalDate;
@@ -24,20 +24,41 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+    private AccountClient accountClient;
+    AppointmentMapper appointmentMapper;
 
-    public List<AppointmentDto> SelectAll() {  return appointmentRepository.findAll().
-            stream().map(appointment -> AppointmentMapper.mapToDto(appointment)).collect(Collectors.toList()); }
+
+    public List<AppointmentDto> SelectAll() {
+//        List<Appointment> appointments = appointmentRepository.findAll();
+//        return appointments.stream().
+        return appointmentRepository.findAll().
+            stream().map(appointment -> appointmentMapper.mapToDto(appointment))
+                .collect(Collectors.toList()); }
+
+
+    @Transactional
+    public AppointmentDto  assignAppointmentToAccount(Appointment appointment, Long idAccount)
+    {
+        Long idA = accountClient.SelectById(idAccount).getBody().getId();
+        Appointment app = appointmentRepository.save(appointment);
+        appointment.setIdAccount(idAccount);
+        appointmentRepository.save(app);
+        return appointmentMapper.mapToDto(appointmentRepository.save(appointment));
+
+    }
+
 
 
     public  AppointmentDto  SelectBy(long id) {
         Appointment appointment = appointmentRepository.findById(id).orElse(null)  ;
-        return AppointmentMapper.mapToDto(appointment);
+        return appointmentMapper.mapToDto(appointment);
     }
+
 
 
     public AppointmentDto Insert(AppointmentDto object) {
         object.setCreatedAt(LocalDateTime.now());
-       // object.setAppointmentStatus(this.Verify( AppointmentMapper.mapToEntity( object )  ));
+        //object.setAppointmentStatus(this.Verify( AppointmentMapper.mapToEntity( object )  ));
         Appointment appointment = AppointmentMapper.mapToEntity(object);
         return AppointmentMapper.mapToDto( appointmentRepository.save(appointment));
     }
@@ -53,7 +74,7 @@ public class AppointmentService {
         appointment.setComments(object.getComments());
         appointment.setFirstVisit(object.isFirstVisit());
         appointmentRepository.save(appointment);
-        return  AppointmentMapper.mapToDto(appointment) ;
+        return  appointmentMapper.mapToDto(appointment) ;
     }
 
     @Transactional
@@ -65,7 +86,7 @@ public class AppointmentService {
         appt.setComments(object.getComments());
         appt.setFirstVisit(object.isFirstVisit());
         appt = appointmentRepository.save(appt);
-        return  AppointmentMapper.mapToDto(appt) ;
+        return  appointmentMapper.mapToDto(appt) ;
     }
 
     /* @Transactional
@@ -99,15 +120,9 @@ public class AppointmentService {
 
 
 
-    @Transactional
 
-    public AppointmentDto  assignAppointmentToAccount(Long idAppointment, Long idAccount)
-    {
-        Appointment appointment = appointmentRepository.findById(idAppointment).orElse(null);
-        //Account account = accountRepository.findById(idAccount).orElse(null);
-       // appointment.setAccount(account);
-        return AppointmentMapper.mapToDto(appointmentRepository.save(appointment));
-    }
+
+
 
 //    @Transactional
 //    @Override

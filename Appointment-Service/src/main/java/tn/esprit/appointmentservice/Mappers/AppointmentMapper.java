@@ -1,10 +1,18 @@
 package tn.esprit.appointmentservice.Mappers;
 
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import tn.esprit.appointmentservice.Dto.AppointmentDto;
 import tn.esprit.appointmentservice.entities.Appointment;
+import tn.esprit.appointmentservice.interfaces.AccountClient;
+
+@Component
+@AllArgsConstructor
 
 public class AppointmentMapper {
-    public static Appointment mapToEntity(AppointmentDto appointmentDto){
+
+    AccountClient accountClient;
+    public static  Appointment mapToEntity(AppointmentDto appointmentDto){
 
         return Appointment.builder()
                 .id(appointmentDto.getId())
@@ -23,7 +31,9 @@ public class AppointmentMapper {
                         ( appointmentDto.getAppointmentEnd() == null ? null : appointmentDto.getAppointmentEnd().toLocalTime())
                 )
                 .appointmentStatus(appointmentDto.getAppointmentStatus())
+                .idAccount(appointmentDto.getIdAccount())
                 .build();
+
     }
     public static AppointmentDto mapToDto(Appointment appointment){
         return AppointmentDto.builder()
@@ -38,6 +48,8 @@ public class AppointmentMapper {
                         appointment.getAppointmentDate().atTime(appointment.getAppointmentStartTime())
                         ))
                 .appointmentStatus(appointment.getAppointmentStatus())
+                .idAccount(appointment.getIdAccount())
+               // .accountDto(accountClient.SelectById(appointment.getIdAccount()).getBody())
                 .build();
     }
 
