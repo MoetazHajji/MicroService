@@ -22,15 +22,19 @@ public class CommandController {
 
 
     @Operation(description = "Add new Command")
-    @PostMapping("add")
-    public Command addCommand(@RequestBody Command command, long idA){
+    @PostMapping("add/{idA}")
+    public Command addCommand(@RequestBody Command command,@PathVariable("idA") long idA){
         return commandService.addCommand(command ,idA);
     }
+    @Operation(description = "Add new Command")
+    @PostMapping("add2")
+    public Command addCommand(@RequestBody Command command){
+        return commandService.addCommand2(command);}
 
     @Operation(description = "Modify Command")
-    @PutMapping("modify")
-    public Command modifyCommand(@RequestBody Command command ) {
-        return commandService.modifyCommand(command);
+    @PutMapping("modify/{idA}/{id}")
+    public Command modifyCommand(@RequestBody Command command ,@PathVariable("idA") long idA, @PathVariable("id") long id) {
+        return commandService.modifyCommand(command,idA,id);
     }
 
 

@@ -23,11 +23,11 @@ public class Command implements Serializable {
     Long id;
     //@NonNull
     LocalDate date;
-    @NonNull
+
     String notice;
-    @NonNull
+
     Long quantity_product;
-    @NonNull
+
     Long NbPoduct;
 
 

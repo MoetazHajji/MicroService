@@ -14,7 +14,10 @@ public interface ICommandService {
 
     Command addCommand(Command command, Long idA);
 
-    Command modifyCommand(Command command);
+
+    Command addCommand2(Command command);
+
+    Command modifyCommand(Command commandmodifier, Long idA, long id);
 
     List<Command> retrieveLAByAccountId(Long idA);
 
